@@ -1,27 +1,119 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Code Search</title>
-    <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Code Search</title>
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div id="container">
-        <div id="search-container">
-            <input type="text" id="search-bar" placeholder="Enter number and press Enter" />
-        </div>
-        <button id="add-btn">+</button>
+  <div id="container">
+    <div id="search-container">
+      <input type="text" id="search-bar" placeholder="Enter number and press Enter">
     </div>
+    <button id="add-btn">+</button>
+  </div>
 
-    <div id="add-form">
-        <h2>Add New Code</h2>
-        <input type="number" id="number-input" placeholder="Enter Number" />
-        <input type="text" id="code-input" placeholder="Enter Code" />
-        <button id="save-btn">Save</button>
-        <button class="close">Cancel</button>
-    </div>
+  <div id="add-form">
+    <h2>Add New Code</h2>
+    <input type="number" id="number-input" placeholder="Enter Number">
+    <input type="text" id="code-input" placeholder="Enter Code">
+    <button id="save-btn">Save</button>
+    <button class="close">Cancel</button>
+  </div>
 
-    <script src="script.js"></script>
+  <!-- Firebase SDKs -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-app.js";
+    import { getFirestore, collection, addDoc, getDocs, query, where } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-firestore.js";
+
+    // Firebase Configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyBVzqjolEWTV7StDVy2naaCZtZfH3Lwi2w",
+      authDomain: "database-882b4.firebaseapp.com",
+      projectId: "database-882b4",
+      storageBucket: "database-882b4.appspot.com",
+      messagingSenderId: "1088153511707",
+      appId: "1:1088153511707:web:0a6b812660cba2ac3255be",
+      measurementId: "G-C2HJN0B6D8"
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const codesCollection = collection(db, "codes");
+
+    // UI Elements
+    const addBtn = document.getElementById('add-btn');
+    const addForm = document.getElementById('add-form');
+    const saveBtn = document.getElementById('save-btn');
+    const closeBtn = document.querySelector('.close');
+    const searchBar = document.getElementById('search-bar');
+
+    // Add a new code
+    async function addCode(number, code) {
+      try {
+        await addDoc(codesCollection, { number, code });
+        alert(`Code "${code}" added for number "${number}"!`);
+        addForm.style.display = 'none';
+      } catch (error) {
+        console.error("Error adding code:", error);
+        alert("Failed to add the code. Please try again.");
+      }
+    }
+
+    // Search for a code
+    async function searchCode(number) {
+      try {
+        const q = query(codesCollection, where("number", "==", number));
+        const querySnapshot = await getDocs(q);
+
+        if (!querySnapshot.empty) {
+          querySnapshot.forEach((doc) => {
+            const code = doc.data().code;
+            navigator.clipboard.writeText(code);
+            alert(`Code "${code}" copied to clipboard!`);
+          });
+        } else {
+          alert("Code not found.");
+        }
+      } catch (error) {
+        console.error("Error searching for code:", error);
+        alert("Failed to search for the code. Please try again.");
+      }
+    }
+
+    // Event Listeners
+    addBtn.addEventListener('click', () => {
+      addForm.style.display = 'block';
+    });
+
+    closeBtn.addEventListener('click', () => {
+      addForm.style.display = 'none';
+    });
+
+    saveBtn.addEventListener('click', () => {
+      const number = document.getElementById('number-input').value.trim();
+      const code = document.getElementById('code-input').value.trim();
+
+      if (!number || !code) {
+        alert('Please fill out all fields.');
+        return;
+      }
+
+      addCode(number, code);
+    });
+
+    searchBar.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        const number = searchBar.value.trim();
+        if (number) {
+          searchCode(number);
+        } else {
+          alert('Please enter a number to search.');
+        }
+      }
+    });
+  </script>
 </body>
 </html>
