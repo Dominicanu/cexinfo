@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -25,7 +26,16 @@
   <!-- Firebase SDK -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-app.js";
-    import { getFirestore, collection, addDoc, getDocs, query, where } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-firestore.js";
+    import { 
+      getFirestore, 
+      collection, 
+      addDoc, 
+      getDocs, 
+      query, 
+      where, 
+      deleteDoc, 
+      doc 
+    } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-firestore.js";
 
     // Firebase Configuration
     const firebaseConfig = {
@@ -43,16 +53,21 @@
     const db = getFirestore(app);
     const codesCollection = collection(db, "codes");
 
-    // UI Elements
-    const addBtn = document.getElementById('add-btn');
-    const addForm = document.getElementById('add-form');
-    const saveBtn = document.getElementById('save-btn');
-    const closeBtn = document.querySelector('.close');
-    const searchBar = document.getElementById('search-bar');
-
-    // Add a new C++ code snippet
+    // Add a new C++ code snippet (replace if the number exists)
     async function addCode(number, code) {
       try {
+        // Check if the number already exists
+        const q = query(codesCollection, where("number", "==", number));
+        const querySnapshot = await getDocs(q);
+
+        // If a document with the number exists, delete it
+        if (!querySnapshot.empty) {
+          querySnapshot.forEach(async (docSnapshot) => {
+            await deleteDoc(doc(db, "codes", docSnapshot.id));
+          });
+        }
+
+        // Add the new code
         await addDoc(codesCollection, { number, code });
         alert(`Code for number "${number}" added successfully!`);
         addForm.style.display = 'none';
@@ -82,6 +97,13 @@
         alert("Failed to search for the code. Please try again.");
       }
     }
+
+    // UI Elements
+    const addBtn = document.getElementById('add-btn');
+    const addForm = document.getElementById('add-form');
+    const saveBtn = document.getElementById('save-btn');
+    const closeBtn = document.querySelector('.close');
+    const searchBar = document.getElementById('search-bar');
 
     // Event Listeners
     addBtn.addEventListener('click', () => {
