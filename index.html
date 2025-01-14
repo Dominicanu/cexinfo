@@ -17,12 +17,12 @@
   <div id="add-form">
     <h2>Add New Code</h2>
     <input type="number" id="number-input" placeholder="Enter Number">
-    <input type="text" id="code-input" placeholder="Enter Code">
+    <textarea id="code-input" placeholder="Paste your C++ code here"></textarea>
     <button id="save-btn">Save</button>
     <button class="close">Cancel</button>
   </div>
 
-  <!-- Firebase SDKs -->
+  <!-- Firebase SDK -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-app.js";
     import { getFirestore, collection, addDoc, getDocs, query, where } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-firestore.js";
@@ -50,11 +50,11 @@
     const closeBtn = document.querySelector('.close');
     const searchBar = document.getElementById('search-bar');
 
-    // Add a new code
+    // Add a new C++ code snippet
     async function addCode(number, code) {
       try {
         await addDoc(codesCollection, { number, code });
-        alert(`Code "${code}" added for number "${number}"!`);
+        alert(`Code for number "${number}" added successfully!`);
         addForm.style.display = 'none';
       } catch (error) {
         console.error("Error adding code:", error);
@@ -62,7 +62,7 @@
       }
     }
 
-    // Search for a code
+    // Search for a code by number
     async function searchCode(number) {
       try {
         const q = query(codesCollection, where("number", "==", number));
@@ -72,7 +72,7 @@
           querySnapshot.forEach((doc) => {
             const code = doc.data().code;
             navigator.clipboard.writeText(code);
-            alert(`Code "${code}" copied to clipboard!`);
+            alert("Code copied to clipboard:\n" + code);
           });
         } else {
           alert("Code not found.");
