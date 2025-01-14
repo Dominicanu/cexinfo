@@ -1,26 +1,27 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Simple Website</title>
-  <link rel="stylesheet" href="styles.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Code Search</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <header>
-    <h1>Welcome to My Simple Website</h1>
-  </header>
+    <div id="container">
+        <div id="search-container">
+            <input type="text" id="search-bar" placeholder="Enter number and press Enter" />
+        </div>
+        <button id="add-btn">+</button>
+    </div>
 
-  <main>
-    <p>Click the button below to interact with the site:</p>
-    <button id="alertButton">Click Me</button>
-  </main>
+    <div id="add-form">
+        <h2>Add New Code</h2>
+        <input type="number" id="number-input" placeholder="Enter Number" />
+        <input type="text" id="code-input" placeholder="Enter Code" />
+        <button id="save-btn">Save</button>
+        <button class="close">Cancel</button>
+    </div>
 
-  <footer>
-    <p>&copy; 2025 Your Name. All rights reserved.</p>
-  </footer>
-
-  <script src="script.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
-
