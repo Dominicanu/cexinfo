@@ -79,17 +79,17 @@ body {
   left: 50%;
   transform: translate(-50%, -50%);
   width: 90%;
-  max-width: 400px;
-  background: #fff;
+  max-width: 350px;
+  background: #ffffff;
   padding: 25px;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
   z-index: 1000;
-  border-radius: 20px;
 }
 
 #add-form h2 {
-  font-size: 22px;
-  margin-bottom: 20px;
+  font-size: 20px;
+  margin-bottom: 15px;
   color: #333;
   text-align: center;
 }
@@ -100,23 +100,25 @@ body {
   padding: 12px 15px;
   margin-bottom: 15px;
   font-size: 16px;
-  border: 2px solid #d6dfe8;
-  border-radius: 10px;
+  border: 1px solid #d6dfe8;
+  border-radius: 5px;
 }
 
 #add-form textarea {
   resize: none;
-  height: 120px;
+  height: 100px;
 }
 
 #add-form button {
-  padding: 12px 20px;
+  width: 100%;
+  padding: 12px 15px;
+  margin-top: 10px;
   border: none;
   font-size: 16px;
   font-weight: bold;
-  border-radius: 10px;
+  border-radius: 5px;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: background-color 0.3s ease;
 }
 
 #add-form button.close {
@@ -149,8 +151,18 @@ body {
   z-index: 999;
 }
 
-/* Responsive Design */
+/* Responsive Design for Mobile */
 @media (max-width: 768px) {
+  #search-container {
+    margin-top: 10%;
+  }
+
+  #search-bar {
+    height: 45px;
+    font-size: 14px;
+    padding: 0 15px;
+  }
+
   #add-btn {
     bottom: 20px;
     right: 20px;
@@ -160,10 +172,17 @@ body {
   }
 
   #add-form {
+    width: 95%;
+    max-width: 300px;
     padding: 20px;
   }
 
   #add-form h2 {
     font-size: 18px;
+  }
+
+  #add-form button {
+    font-size: 14px;
+    padding: 10px 12px;
   }
 }
