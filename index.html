@@ -2,9 +2,253 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>cex info ❤️</title>
-  <link rel="stylesheet" href="styles.css">
+  <style>
+    :root {
+      --primary: #007AFF;
+      --primary-dark: #0056B3;
+      --background: #F2F2F7;
+      --surface: #FFFFFF;
+      --text: #1C1C1E;
+      --text-secondary: #8E8E93;
+      --border: #E5E5EA;
+      --modal-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+      --radius: 12px;
+      --safe-area-bottom: env(safe-area-inset-bottom, 20px);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+      background-color: var(--background);
+      color: var(--text);
+      line-height: 1.5;
+      min-height: 100vh;
+      padding: env(safe-area-inset-top, 20px) env(safe-area-inset-right, 20px) var(--safe-area-bottom) env(safe-area-inset-left, 20px);
+    }
+
+    #container {
+      max-width: 100%;
+      margin: 0 auto;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    #search-container {
+      margin: 0;
+      position: relative;
+    }
+
+    #search-bar {
+      width: 100%;
+      height: 48px;
+      padding: 0 16px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      font-size: 17px;
+      color: var(--text);
+      appearance: none;
+      transition: all 0.2s ease;
+    }
+
+    #search-bar:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.1);
+    }
+
+    #add-btn {
+      position: fixed;
+      right: max(16px, env(safe-area-inset-right, 16px));
+      bottom: max(16px, env(safe-area-inset-bottom, 16px));
+      width: 56px;
+      height: 56px;
+      background: var(--primary);
+      border: none;
+      border-radius: 28px;
+      color: white;
+      font-size: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(0, 122, 255, 0.2);
+      transition: transform 0.2s ease;
+      overflow: hidden;
+      position: relative;
+    }
+
+    #add-btn:active {
+      transform: scale(0.95);
+    }
+
+    #add-btn.disabled {
+      background: var(--text-secondary);
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+
+    .cooldown-overlay {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.3);
+      transform-origin: bottom;
+      transition: transform 3s linear;
+    }
+
+    #add-form {
+      display: none;
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: var(--surface);
+      border-radius: var(--radius) var(--radius) 0 0;
+      padding: 20px 16px calc(16px + var(--safe-area-bottom));
+      box-shadow: var(--modal-shadow);
+      z-index: 1000;
+      animation: slideUp 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    #add-form h2 {
+      font-size: 20px;
+      font-weight: 600;
+      margin-bottom: 16px;
+      text-align: center;
+    }
+
+    #add-form input,
+    #add-form textarea {
+      width: 100%;
+      margin-bottom: 16px;
+      padding: 12px 16px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      font-size: 17px;
+      background: var(--background);
+      color: var(--text);
+    }
+
+    #add-form textarea {
+      min-height: 120px;
+      resize: none;
+    }
+
+    #add-form input:focus,
+    #add-form textarea:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.1);
+    }
+
+    #add-form button {
+      width: 100%;
+      height: 50px;
+      margin-bottom: 8px;
+      border: none;
+      border-radius: var(--radius);
+      font-size: 17px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+    }
+
+    #add-form button#save-btn {
+      background: var(--primary);
+      color: white;
+    }
+
+    #add-form button#save-btn:active {
+      background: var(--primary-dark);
+    }
+
+    #add-form button.close {
+      background: var(--background);
+      color: var(--text);
+    }
+
+    #add-form button.close:active {
+      background: var(--border);
+    }
+
+    #overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.4);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      z-index: 999;
+      animation: fadeIn 0.3s ease;
+    }
+
+    @keyframes slideUp {
+      from { transform: translateY(100%); }
+      to { transform: translateY(0); }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes countdown {
+      from { transform: scaleY(1); }
+      to { transform: scaleY(0); }
+    }
+
+    @media (min-width: 768px) {
+      #container {
+        max-width: 480px;
+        margin: 40px auto;
+      }
+
+      #add-form {
+        position: fixed;
+        left: 50%;
+        top: 50%;
+        bottom: auto;
+        transform: translate(-50%, -50%);
+        width: 90%;
+        max-width: 420px;
+        border-radius: var(--radius);
+        padding: 24px;
+        animation: modalIn 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      @keyframes modalIn {
+        from {
+          opacity: 0;
+          transform: translate(-50%, -48%) scale(0.96);
+        }
+        to {
+          opacity: 1;
+          transform: translate(-50%, -50%) scale(1);
+        }
+      }
+    }
+
+    @supports (-webkit-touch-callout: none) {
+      #add-form input,
+      #add-form textarea,
+      #search-bar {
+        font-size: 16px;
+      }
+    }
+  </style>
 </head>
 <body>
   <div id="container">
@@ -37,7 +281,6 @@
       doc 
     } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-firestore.js";
 
-    // Firebase Configuration
     const firebaseConfig = {
       apiKey: "AIzaSyBVzqjolEWTV7StDVy2naaCZtZfH3Lwi2w",
       authDomain: "database-882b4.firebaseapp.com",
@@ -48,12 +291,12 @@
       measurementId: "G-C2HJN0B6D8"
     };
 
-    // Initialize Firebase
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
     const codesCollection = collection(db, "codes");
 
-    // Add a new code snippet
+    let isOnCooldown = false;
+
     async function addCode(number, code) {
       try {
         const q = query(codesCollection, where("number", "==", number));
@@ -74,7 +317,6 @@
       }
     }
 
-    // Search for a code
     async function searchCode(number) {
       try {
         const q = query(codesCollection, where("number", "==", number));
@@ -95,13 +337,26 @@
       }
     }
 
-    // UI Elements
-    const addBtn = document.getElementById('add-btn');
-    const addForm = document.getElementById('add-form');
-    const overlay = document.getElementById('overlay');
-    const saveBtn = document.getElementById('save-btn');
-    const closeBtn = document.querySelector('.close');
-    const searchBar = document.getElementById('search-bar');
+    function startCooldown() {
+      if (isOnCooldown) return;
+      
+      isOnCooldown = true;
+      const addBtn = document.getElementById('add-btn');
+      
+      const overlay = document.createElement('div');
+      overlay.className = 'cooldown-overlay';
+      addBtn.appendChild(overlay);
+      
+      addBtn.classList.add('disabled');
+      
+      overlay.style.animation = 'countdown 3s linear';
+      
+      setTimeout(() => {
+        isOnCooldown = false;
+        addBtn.classList.remove('disabled');
+        overlay.remove();
+      }, 3000);
+    }
 
     function toggleAddForm(show) {
       addForm.style.display = show ? 'block' : 'none';
@@ -109,11 +364,23 @@
     }
 
     // Event Listeners
-    addBtn.addEventListener('click', () => toggleAddForm(true));
+    const addBtn = document.getElementById('add-btn');
+    const addForm = document.getElementById('add-form');
+    const overlay = document.getElementById('overlay');
+    const saveBtn = document.getElementById('save-btn');
+    const closeBtn = document.querySelector('.close');
+    const searchBar = document.getElementById('search-bar');
+
+    addBtn.addEventListener('click', () => {
+      if (!isOnCooldown) {
+        toggleAddForm(true);
+      }
+    });
+
     closeBtn.addEventListener('click', () => toggleAddForm(false));
     overlay.addEventListener('click', () => toggleAddForm(false));
 
-    saveBtn.addEventListener('click', () => {
+    saveBtn.addEventListener('click', async () => {
       const number = document.getElementById('number-input').value.trim();
       const code = document.getElementById('code-input').value.trim();
 
@@ -122,7 +389,10 @@
         return;
       }
 
-      addCode(number, code);
+      await addCode(number, code);
+      document.getElementById('number-input').value = '';
+      document.getElementById('code-input').value = '';
+      startCooldown();
     });
 
     searchBar.addEventListener('keydown', (e) => {
