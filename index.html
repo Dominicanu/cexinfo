@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -20,7 +21,7 @@
     }
 
     h1 {
-      font-size: 3rem;
+      font-size: 2.5rem;
       font-weight: 600;
       margin-bottom: 30px;
       letter-spacing: -0.02em;
@@ -62,7 +63,7 @@
       padding: 14px 28px;
       font-size: 1rem;
       border: none;
-      border-radius: 12px;
+      border-radius: 16px;
       cursor: pointer;
       transition: background 0.3s ease;
       font-weight: 500;
@@ -85,31 +86,30 @@
     .code-box {
       position: relative;
       background: white;
-      border-radius: 18px;
+      border-radius: 16px;
       box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
-      padding: 20px 28px 20px 28px;
-      overflow: hidden;
-      word-break: break-word;
+      padding: 20px;
+      overflow: auto;
     }
 
     .code-box pre {
       margin: 0;
-      white-space: pre-wrap;
       font-family: 'Courier New', monospace;
       font-size: 0.95rem;
-      padding-right: 60px; /* Prevent overlap with copy button */
+      white-space: pre-wrap;
+      word-break: break-word;
     }
 
     .copy-btn {
       position: absolute;
-      top: 16px;
-      right: 20px;
+      top: 10px;
+      right: 10px;
       background-color: #007aff;
       color: white;
       border: none;
-      padding: 6px 14px;
-      font-size: 0.8rem;
-      border-radius: 8px;
+      padding: 4px 10px;
+      font-size: 0.7rem;
+      border-radius: 6px;
       cursor: pointer;
       transition: background 0.2s ease;
       z-index: 1;
@@ -125,8 +125,10 @@
       }
 
       .copy-btn {
-        top: 12px;
-        right: 16px;
+        font-size: 0.65rem;
+        padding: 3px 8px;
+        top: 8px;
+        right: 8px;
       }
     }
   </style>
@@ -144,7 +146,6 @@
     <p>Loading code snippets...</p>
   </div>
 
-  <!-- Firebase -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
     import { getFirestore, collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
