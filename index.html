@@ -2,165 +2,217 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>cex info ❤️ pops</title>
-  <link rel="stylesheet" href="styles.css">
+  <title>C++ Vault</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
+
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: #f6f7f9;
+      color: #111;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 60px 20px;
+    }
+
+    h1 {
+      font-size: 3rem;
+      font-weight: 600;
+      margin-bottom: 30px;
+      letter-spacing: -0.02em;
+    }
+
+    .input-container {
+      width: 100%;
+      max-width: 900px;
+      margin-bottom: 30px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    textarea {
+      width: 100%;
+      min-height: 200px;
+      padding: 20px;
+      font-family: 'Courier New', monospace;
+      font-size: 1rem;
+      background: #ffffffcc;
+      border: none;
+      border-radius: 16px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.04);
+      resize: vertical;
+      transition: box-shadow 0.3s ease;
+    }
+
+    textarea:focus {
+      outline: none;
+      box-shadow: 0 12px 32px rgba(0,0,0,0.1);
+    }
+
+    button {
+      align-self: flex-start;
+      background-color: #007aff;
+      color: white;
+      padding: 12px 28px;
+      font-size: 1rem;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+      font-weight: 500;
+    }
+
+    button:hover {
+      background-color: #0058c6;
+    }
+
+    .code-container {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      width: 100%;
+      max-width: 900px;
+      margin-top: 40px;
+    }
+
+    .code-box {
+      background: white;
+      border-radius: 18px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+      padding: 20px 28px;
+      position: relative;
+      text-align: left;
+      overflow-wrap: break-word;
+      word-break: break-word;
+    }
+
+    .code-box pre {
+      margin: 0;
+      white-space: pre-wrap;
+      font-family: 'Courier New', monospace;
+      font-size: 0.95rem;
+    }
+
+    .copy-btn {
+      position: absolute;
+      top: 16px;
+      right: 20px;
+      background-color: #007aff;
+      color: white;
+      border: none;
+      padding: 6px 14px;
+      font-size: 0.8rem;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.2s ease;
+    }
+
+    .copy-btn:hover {
+      background-color: #0059c1;
+    }
+
+    @media (max-width: 600px) {
+      h1 {
+        font-size: 2rem;
+      }
+
+      button {
+        width: 100%;
+        text-align: center;
+      }
+
+      .copy-btn {
+        top: 12px;
+        right: 16px;
+      }
+    }
+  </style>
 </head>
 <body>
-  <div id="container">
-    <div id="search-container">
-      <input type="text" id="search-bar" placeholder="Enter #">
-    </div>
-    <button id="add-btn">+</button>
+
+  <h1>C++ Vault</h1>
+  <div class="input-container">
+    <textarea id="codeInput" placeholder="Paste your C++ code here..."></textarea>
+    <button id="uploadBtn">Upload</button>
   </div>
 
-  <div id="add-form">
-    <h2>Add New Code</h2>
-    <input type="number" id="number-input" placeholder="Enter #">
-    <textarea id="code-input" placeholder="Paste code here"></textarea>
-    <button id="save-btn">Save</button>
-    <button class="close">Cancel</button>
+  <div class="code-container" id="codeList">
+    <p>Loading code snippets...</p>
   </div>
 
-  <div id="overlay"></div>
-
+  <!-- Firebase -->
   <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-app.js";
-    import { 
-      getFirestore, 
-      collection, 
-      addDoc, 
-      getDocs, 
-      query, 
-      where, 
-      deleteDoc, 
-      doc 
-    } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-firestore.js";
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
+    import { getFirestore, collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
 
     const firebaseConfig = {
-      apiKey: "AIzaSyBVzqjolEWTV7StDVy2naaCZtZfH3Lwi2w",
-      authDomain: "database-882b4.firebaseapp.com",
-      projectId: "database-882b4",
-      storageBucket: "database-882b4.appspot.com",
-      messagingSenderId: "1088153511707",
-      appId: "1:1088153511707:web:0a6b812660cba2ac3255be",
-      measurementId: "G-C2HJN0B6D8"
+      apiKey: "AIzaSyAWc15d2KAKACMu7k1UdQ2W3aHlODAjg3k",
+      authDomain: "databasescl.firebaseapp.com",
+      projectId: "databasescl",
+      storageBucket: "databasescl.firebasestorage.app",
+      messagingSenderId: "156986824945",
+      appId: "1:156986824945:web:0344a20529943f61a77150",
+      measurementId: "G-6B7K0E28NL"
     };
 
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
-    const codesCollection = collection(db, "codes");
 
-    let isOnCooldown = false;
-
-    async function addCode(number, code) {
-      try {
-        const q = query(codesCollection, where("number", "==", number));
-        const querySnapshot = await getDocs(q);
-
-        if (!querySnapshot.empty) {
-          querySnapshot.forEach(async (docSnapshot) => {
-            await deleteDoc(doc(db, "codes", docSnapshot.id));
-          });
-        }
-
-        await addDoc(codesCollection, { number, code });
-        alert(`Code for number "${number}" added successfully!`);
-        toggleAddForm(false);
-      } catch (error) {
-        console.error("Error adding code:", error);
-        alert("Failed to add the code. Please try again.");
-      }
-    }
-
-    async function searchCode(number) {
-      try {
-        const q = query(codesCollection, where("number", "==", number));
-        const querySnapshot = await getDocs(q);
-
-        if (!querySnapshot.empty) {
-          querySnapshot.forEach((doc) => {
-            const code = doc.data().code;
-            navigator.clipboard.writeText(code);
-            alert("Code copied to clipboard:\n" + code);
-          });
-        } else {
-          alert("Code not found.");
-        }
-      } catch (error) {
-        console.error("Error searching for code:", error);
-        alert("Failed to search for the code. Please try again.");
-      }
-    }
-
-    function startCooldown() {
-      if (isOnCooldown) return;
-      
-      isOnCooldown = true;
-      const addBtn = document.getElementById('add-btn');
-      
-      const overlay = document.createElement('div');
-      overlay.className = 'cooldown-overlay';
-      addBtn.appendChild(overlay);
-      
-      addBtn.classList.add('disabled');
-      
-      overlay.style.animation = 'countdown 3s linear';
-      
-      setTimeout(() => {
-        isOnCooldown = false;
-        addBtn.classList.remove('disabled');
-        overlay.remove();
-      }, 3000);
-    }
-
-    function toggleAddForm(show) {
-      addForm.style.display = show ? 'block' : 'none';
-      overlay.style.display = show ? 'block' : 'none';
-    }
-
-    // Event Listeners
-    const addBtn = document.getElementById('add-btn');
-    const addForm = document.getElementById('add-form');
-    const overlay = document.getElementById('overlay');
-    const saveBtn = document.getElementById('save-btn');
-    const closeBtn = document.querySelector('.close');
-    const searchBar = document.getElementById('search-bar');
-
-    addBtn.addEventListener('click', () => {
-      if (!isOnCooldown) {
-        toggleAddForm(true);
-      }
-    });
-
-    closeBtn.addEventListener('click', () => toggleAddForm(false));
-    overlay.addEventListener('click', () => toggleAddForm(false));
-
-    saveBtn.addEventListener('click', async () => {
-      const number = document.getElementById('number-input').value.trim();
-      const code = document.getElementById('code-input').value.trim();
-
-      if (!number || !code) {
-        alert('Please fill out all fields.');
+    async function uploadCode() {
+      const code = document.getElementById('codeInput').value.trim();
+      if (!code) {
+        alert("Paste some code first!");
         return;
       }
-
-      await addCode(number, code);
-      document.getElementById('number-input').value = '';
-      document.getElementById('code-input').value = '';
-      startCooldown();
-    });
-
-    searchBar.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter') {
-        const number = searchBar.value.trim();
-        if (number) {
-          searchCode(number);
-        } else {
-          alert('Please enter a number to search.');
-        }
+      try {
+        await addDoc(collection(db, "codes"), { code });
+        document.getElementById('codeInput').value = '';
+        loadCodes();
+      } catch (error) {
+        alert("Error uploading code: " + error.message);
       }
-    });
+    }
+
+    async function loadCodes() {
+      const container = document.getElementById('codeList');
+      container.innerHTML = '';
+      try {
+        const snapshot = await getDocs(collection(db, "codes"));
+        if (snapshot.empty) {
+          container.innerHTML = "<p>No code uploaded yet.</p>";
+          return;
+        }
+
+        snapshot.forEach(doc => {
+          const { code } = doc.data();
+          const codeBox = document.createElement("div");
+          codeBox.className = "code-box";
+          codeBox.innerHTML = `
+            <button class="copy-btn">Copy</button>
+            <pre>${code}</pre>
+          `;
+          codeBox.querySelector('.copy-btn').onclick = () => {
+            navigator.clipboard.writeText(code);
+            alert("Code copied!");
+          };
+          container.appendChild(codeBox);
+        });
+      } catch (error) {
+        container.innerHTML = "<p>Error loading code snippets.</p>";
+        console.error(error);
+      }
+    }
+
+    // Set up button click
+    document.getElementById("uploadBtn").addEventListener("click", uploadCode);
+
+    // Initial load
+    loadCodes();
   </script>
 </body>
 </html>
