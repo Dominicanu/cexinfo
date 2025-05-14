@@ -47,6 +47,7 @@
       box-shadow: 0 8px 24px rgba(0,0,0,0.04);
       resize: vertical;
       transition: box-shadow 0.3s ease;
+      box-sizing: border-box;
     }
 
     textarea:focus {
@@ -55,16 +56,17 @@
     }
 
     button {
-      align-self: flex-start;
+      width: 100%;
       background-color: #007aff;
       color: white;
-      padding: 12px 28px;
+      padding: 14px 28px;
       font-size: 1rem;
       border: none;
       border-radius: 12px;
       cursor: pointer;
       transition: background 0.3s ease;
       font-weight: 500;
+      box-sizing: border-box;
     }
 
     button:hover {
@@ -121,11 +123,6 @@
         font-size: 2rem;
       }
 
-      button {
-        width: 100%;
-        text-align: center;
-      }
-
       .copy-btn {
         top: 12px;
         right: 16px;
@@ -136,6 +133,7 @@
 <body>
 
   <h1>Galbi 💖</h1>
+
   <div class="input-container">
     <textarea id="codeInput" placeholder="Paste your C++ code here..."></textarea>
     <button id="uploadBtn">Upload</button>
@@ -209,7 +207,6 @@
     }
 
     document.getElementById("uploadBtn").addEventListener("click", uploadCode);
-
     loadCodes();
   </script>
 </body>
