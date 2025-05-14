@@ -83,13 +83,12 @@
     }
 
     .code-box {
+      position: relative;
       background: white;
       border-radius: 18px;
       box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
-      padding: 20px 28px;
-      position: relative;
-      text-align: left;
-      overflow-wrap: break-word;
+      padding: 20px 28px 20px 28px;
+      overflow: hidden;
       word-break: break-word;
     }
 
@@ -98,6 +97,7 @@
       white-space: pre-wrap;
       font-family: 'Courier New', monospace;
       font-size: 0.95rem;
+      padding-right: 60px; /* Prevent overlap with copy button */
     }
 
     .copy-btn {
@@ -112,6 +112,7 @@
       border-radius: 8px;
       cursor: pointer;
       transition: background 0.2s ease;
+      z-index: 1;
     }
 
     .copy-btn:hover {
@@ -132,7 +133,7 @@
 </head>
 <body>
 
-  <h1>Galbi ❤️</h1>
+  <h1>Galbi 💖</h1>
 
   <div class="input-container">
     <textarea id="codeInput" placeholder="Paste your C++ code here..."></textarea>
